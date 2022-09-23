@@ -7,6 +7,13 @@
 
 import Foundation
 
+protocol NetworkTarget {
+    var httpMethod: String { get }
+    var authorizationHeader: String { get }
+    var urlString: String { get }
+    var parameters: [[String: Any]]? { get }
+}
+
 struct AuthTarget: NetworkTarget {
     var httpMethod: String = "POST"
     var authorizationHeader: String = "Basic aW9zLWNsaWVudDpwYXNzd29yZA=="

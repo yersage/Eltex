@@ -77,6 +77,7 @@ class AuthViewController: UIViewController {
         passwordTextField.delegate = self
         
         view.addSubview(scrollView)
+        
         scrollView.addSubview(usernameTextField)
         scrollView.addSubview(passwordTextField)
         scrollView.addSubview(button)
@@ -89,8 +90,8 @@ class AuthViewController: UIViewController {
         
         usernameTextField.frame = CGRect(x: 30,
                                          y: 30,
-                                      width: scrollView.width - 60,
-                                      height: 52)
+                                         width: scrollView.width - 60,
+                                         height: 52)
         
         passwordTextField.frame = CGRect(x: 30,
                                          y: usernameTextField.bottom + 10,
@@ -105,13 +106,22 @@ class AuthViewController: UIViewController {
     
     // MARK: - Selector methods
     @objc func signInButtonPressed() {
-        manager.load { [weak self] result in
+        guard let username = usernameTextField.text,
+              username.count > 0,
+              let password = passwordTextField.text,
+              password.count > 0 else {
+            print("Invalid credentials.")
+            return
+        }
+        
+        manager.load(username: username,
+                     password: password) { [weak self] result in
             switch result {
             case .success(let model):
-                print(model)
                 self?.tokenModel = model
                 DispatchQueue.main.async {
                     let vc = ProfileViewController()
+                    vc.token = model.access_token
                     self?.navigationController?.pushViewController(vc, animated: true)
                 }
             case .failure(let error):

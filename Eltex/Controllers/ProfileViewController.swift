@@ -42,7 +42,9 @@ class ProfileViewController: UIViewController {
         return tableView
     }()
     
-    var profileModel: ProfileModel!
+    private let manager = ProfileManager()
+    private var profileModel: ProfileModel?
+    var token: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,18 +54,37 @@ class ProfileViewController: UIViewController {
         title = "Profile"
         
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.setHidesBackButton(true,
+                                          animated: false)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sign Out",
+                                                            style: .done,
+                                                            target: self,
+                                                            action: #selector(signOutButtonPressed))
         
-        profileModel = downloadProfileModel()
+        guard let token = token else {
+            fatalError("Token is nil.")
+        }
+        
+        manager.load(token: token) { [weak self] result in
+            switch result {
+            case .success(let model):
+                self?.profileModel = model
+                DispatchQueue.main.async {
+                    self?.roleIDLabel.text = "roleID: \(model.roleId)"
+                    self?.usernameLabel.text = "username: \(model.username)"
+                    self?.emailLabel.text = "email: \(model.email ?? "is not provided")"
+                    self?.tableView.reloadData()
+                }                
+            case .failure(let error):
+                fatalError(error.localizedDescription)
+            }
+        }
         
         view.addSubview(scrollView)
         scrollView.addSubview(roleIDLabel)
         scrollView.addSubview(usernameLabel)
         scrollView.addSubview(emailLabel)
         scrollView.addSubview(tableView)
-        
-        roleIDLabel.text = "roleID: \(profileModel.roleId)"
-        usernameLabel.text = "username: \(profileModel.username)"
-        emailLabel.text = "email: \(profileModel.email ?? "is not provided")"
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -89,38 +110,22 @@ class ProfileViewController: UIViewController {
         tableView.frame = CGRect(x: 30,
                                  y: emailLabel.bottom + 6,
                                  width: scrollView.width - 60,
-                                 height: emailLabel.bottom + 100)
+                                 height: scrollView.height - emailLabel.bottom - 200)
     }
     
-    private func downloadProfileModel() -> ProfileModel {
-        guard let url = Bundle.main.url(forResource: "profile", withExtension: "json") else {
-            fatalError("Failed to locate profile.json in app bundle.")
-        }
-
-        guard let data = try? Data(contentsOf: url) else {
-            fatalError("Failed to load profile.json in app bundle.")
-        }
-        
-        profileModel = try! JSONDecoder().decode(ProfileModel.self, from: data)
-        
-        let decoder = JSONDecoder()
-        
-        guard let loadedProfileModel = try? decoder.decode(ProfileModel.self, from: data) else {
-            fatalError("Failed to decode profile.json from app bundle.")
-        }
-        
-        return loadedProfileModel
+    @objc func signOutButtonPressed() {
+        navigationController?.popViewController(animated: true)
     }
 }
 
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return profileModel.permissions.count
+        return profileModel?.permissions.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = profileModel.permissions[indexPath.row]
+        cell.textLabel?.text = profileModel?.permissions[indexPath.row]
         return cell
     }
 }
