@@ -37,11 +37,11 @@
 		FC6D694D28DCEBAB00BE22AA /* TokenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenModel.swift; sourceTree = "<group>"; };
 		FC6D695128DCF0E500BE22AA /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 		FC6D695428DCF52300BE22AA /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
-		FC6D695628DD90FC00BE22AA /* TokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenManager.swift; sourceTree = "<group>"; };
-		FC6D695928DE21CD00BE22AA /* URLRequestBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequestBuilder.swift; sourceTree = "<group>"; };
-		FC6D695B28DE2C6A00BE22AA /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
-		FC6D695D28DE2D6000BE22AA /* AuthTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTarget.swift; sourceTree = "<group>"; };
-		FC6D695F28DE32F800BE22AA /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		FC6D695628DD90FC00BE22AA /* TokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TokenManager.swift; path = ../Networking/TokenManager.swift; sourceTree = "<group>"; };
+		FC6D695928DE21CD00BE22AA /* URLRequestBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = URLRequestBuilder.swift; path = ../Networking/URLRequestBuilder.swift; sourceTree = "<group>"; };
+		FC6D695B28DE2C6A00BE22AA /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AuthManager.swift; path = ../Networking/AuthManager.swift; sourceTree = "<group>"; };
+		FC6D695D28DE2D6000BE22AA /* AuthTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AuthTarget.swift; path = ../Networking/AuthTarget.swift; sourceTree = "<group>"; };
+		FC6D695F28DE32F800BE22AA /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NetworkError.swift; path = ../Networking/NetworkError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,7 +75,7 @@
 			isa = PBXGroup;
 			children = (
 				FC6D694C28DCEB9000BE22AA /* Models */,
-				FC6D692828DC74FB00BE22AA /* Storyboards */,
+				FC6D692828DC74FB00BE22AA /* Views */,
 				FC6D692928DC753100BE22AA /* Controllers */,
 				FC6D695328DCF51A00BE22AA /* Extensions */,
 				FC6D692728DC74EF00BE22AA /* Resources */,
@@ -94,13 +94,13 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		FC6D692828DC74FB00BE22AA /* Storyboards */ = {
+		FC6D692828DC74FB00BE22AA /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				FC6D691728DC67AA00BE22AA /* Main.storyboard */,
 				FC6D691C28DC67AC00BE22AA /* LaunchScreen.storyboard */,
 			);
-			path = Storyboards;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		FC6D692928DC753100BE22AA /* Controllers */ = {
