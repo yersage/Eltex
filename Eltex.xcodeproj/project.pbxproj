@@ -17,10 +17,8 @@
 		FC6D694E28DCEBAB00BE22AA /* TokenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D694D28DCEBAB00BE22AA /* TokenModel.swift */; };
 		FC6D695228DCF0E500BE22AA /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D695128DCF0E500BE22AA /* ProfileModel.swift */; };
 		FC6D695528DCF52300BE22AA /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D695428DCF52300BE22AA /* UIView.swift */; };
-		FC6D695728DD90FC00BE22AA /* TokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D695628DD90FC00BE22AA /* TokenManager.swift */; };
 		FC6D695C28DE2C6A00BE22AA /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D695B28DE2C6A00BE22AA /* AuthManager.swift */; };
-		FC6D695E28DE2D6000BE22AA /* AuthTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D695D28DE2D6000BE22AA /* AuthTarget.swift */; };
-		FC6D696028DE32F800BE22AA /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D695F28DE32F800BE22AA /* NetworkError.swift */; };
+		FC6D696028DE32F800BE22AA /* HTTPResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D695F28DE32F800BE22AA /* HTTPResponse.swift */; };
 		FC6D699928DE559600BE22AA /* ProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D699828DE559600BE22AA /* ProfileManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,10 +35,8 @@
 		FC6D694D28DCEBAB00BE22AA /* TokenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenModel.swift; sourceTree = "<group>"; };
 		FC6D695128DCF0E500BE22AA /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 		FC6D695428DCF52300BE22AA /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
-		FC6D695628DD90FC00BE22AA /* TokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TokenManager.swift; path = ../Networking/TokenManager.swift; sourceTree = "<group>"; };
 		FC6D695B28DE2C6A00BE22AA /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AuthManager.swift; path = ../Networking/AuthManager.swift; sourceTree = "<group>"; };
-		FC6D695D28DE2D6000BE22AA /* AuthTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AuthTarget.swift; path = ../Networking/AuthTarget.swift; sourceTree = "<group>"; };
-		FC6D695F28DE32F800BE22AA /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NetworkError.swift; path = ../Networking/NetworkError.swift; sourceTree = "<group>"; };
+		FC6D695F28DE32F800BE22AA /* HTTPResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HTTPResponse.swift; path = ../Networking/HTTPResponse.swift; sourceTree = "<group>"; };
 		FC6D699828DE559600BE22AA /* ProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -117,11 +113,9 @@
 			children = (
 				FC6D694D28DCEBAB00BE22AA /* TokenModel.swift */,
 				FC6D695128DCF0E500BE22AA /* ProfileModel.swift */,
-				FC6D695628DD90FC00BE22AA /* TokenManager.swift */,
 				FC6D695B28DE2C6A00BE22AA /* AuthManager.swift */,
-				FC6D695D28DE2D6000BE22AA /* AuthTarget.swift */,
-				FC6D695F28DE32F800BE22AA /* NetworkError.swift */,
 				FC6D699828DE559600BE22AA /* ProfileManager.swift */,
+				FC6D695F28DE32F800BE22AA /* HTTPResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -206,8 +200,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				FC6D692628DC74E900BE22AA /* AuthViewController.swift in Sources */,
-				FC6D695E28DE2D6000BE22AA /* AuthTarget.swift in Sources */,
-				FC6D695728DD90FC00BE22AA /* TokenManager.swift in Sources */,
 				FC6D699928DE559600BE22AA /* ProfileManager.swift in Sources */,
 				FC6D691628DC67AA00BE22AA /* ProfileViewController.swift in Sources */,
 				FC6D691228DC67AA00BE22AA /* AppDelegate.swift in Sources */,
@@ -215,7 +207,7 @@
 				FC6D695228DCF0E500BE22AA /* ProfileModel.swift in Sources */,
 				FC6D694E28DCEBAB00BE22AA /* TokenModel.swift in Sources */,
 				FC6D691428DC67AA00BE22AA /* SceneDelegate.swift in Sources */,
-				FC6D696028DE32F800BE22AA /* NetworkError.swift in Sources */,
+				FC6D696028DE32F800BE22AA /* HTTPResponse.swift in Sources */,
 				FC6D695C28DE2C6A00BE22AA /* AuthManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

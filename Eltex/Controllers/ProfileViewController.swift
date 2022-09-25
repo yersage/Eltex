@@ -33,6 +33,13 @@ class ProfileViewController: UIViewController {
         return label
     }()
     
+    private let permissionsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Permissions"
+        label.font = UIFont.boldSystemFont(ofSize: 24)
+        return label
+    }()
+    
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.layer.cornerRadius = 12
@@ -49,9 +56,13 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if UserDefaults.standard.bool(forKey: "signed_in") != true {
+            return
+        }
+        
         view.backgroundColor = .white
         
-        title = "Profile"
+        title = "Profile info"
         
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.setHidesBackButton(true,
@@ -61,7 +72,7 @@ class ProfileViewController: UIViewController {
                                                             target: self,
                                                             action: #selector(signOutButtonPressed))
         
-        guard let token = token else {
+        guard let token = UserDefaults.standard.string(forKey: "token") else {
             fatalError("Token is nil.")
         }
         
@@ -70,9 +81,9 @@ class ProfileViewController: UIViewController {
             case .success(let model):
                 self?.profileModel = model
                 DispatchQueue.main.async {
-                    self?.roleIDLabel.text = "roleID: \(model.roleId)"
-                    self?.usernameLabel.text = "username: \(model.username)"
-                    self?.emailLabel.text = "email: \(model.email ?? "is not provided")"
+                    self?.roleIDLabel.text = model.roleId
+                    self?.usernameLabel.text = model.username
+                    self?.emailLabel.text = model.email
                     self?.tableView.reloadData()
                 }                
             case .failure(let error):
@@ -81,13 +92,19 @@ class ProfileViewController: UIViewController {
         }
         
         view.addSubview(scrollView)
-        scrollView.addSubview(roleIDLabel)
         scrollView.addSubview(usernameLabel)
+        scrollView.addSubview(roleIDLabel)
         scrollView.addSubview(emailLabel)
+        scrollView.addSubview(permissionsLabel)
         scrollView.addSubview(tableView)
         
         tableView.delegate = self
         tableView.dataSource = self
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        validateAuth()
     }
     
     override func viewDidLayoutSubviews() {
@@ -95,26 +112,41 @@ class ProfileViewController: UIViewController {
         
         scrollView.frame = view.bounds
         
-        roleIDLabel.frame = CGRect(x: 30,
-                                   y: 30,
-                                   width: scrollView.width - 60,
-                                   height: 24)
         usernameLabel.frame = CGRect(x: 30,
-                                     y: roleIDLabel.bottom + 6,
+                                     y: 0,
                                      width: scrollView.width - 60,
                                      height: 24)
+        roleIDLabel.frame = CGRect(x: 30,
+                                   y: usernameLabel.bottom + 6,
+                                   width: scrollView.width - 60,
+                                   height: 24)
         emailLabel.frame = CGRect(x: 30,
-                                  y: usernameLabel.bottom + 6,
+                                  y: roleIDLabel.bottom + 6,
                                   width: scrollView.width - 60,
                                   height: 24)
+        permissionsLabel.frame = CGRect(x: 30,
+                                        y: emailLabel.bottom + 6,
+                                        width: scrollView.width - 60,
+                                        height: 24)
         tableView.frame = CGRect(x: 30,
-                                 y: emailLabel.bottom + 6,
+                                 y: permissionsLabel.bottom + 6,
                                  width: scrollView.width - 60,
-                                 height: scrollView.height - emailLabel.bottom - 200)
+                                 height: scrollView.height - emailLabel.bottom - 275)
     }
     
     @objc func signOutButtonPressed() {
-        navigationController?.popViewController(animated: true)
+        UserDefaults.standard.set(false, forKey: "signed_in")
+        UserDefaults.standard.removeObject(forKey: "token")
+        validateAuth()
+    }
+    
+    private func validateAuth() {
+        if UserDefaults.standard.bool(forKey: "signed_in") != true {
+            let vc = AuthViewController()
+            let nav = UINavigationController(rootViewController: vc)
+            nav.modalPresentationStyle = .fullScreen
+            present(nav, animated: false)
+        }
     }
 }
 

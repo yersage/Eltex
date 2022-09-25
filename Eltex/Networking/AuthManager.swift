@@ -10,7 +10,7 @@ import Foundation
 class AuthManager: NSObject {
     func load(username: String,
               password: String,
-              completion: @escaping (Result<TokenModel, Error>) -> Void) {
+              completion: @escaping (TokenModel?, String?) -> Void) {
         
         let urlSession = URLSession(configuration: .default,
                                     delegate: self,
@@ -22,13 +22,26 @@ class AuthManager: NSObject {
         urlSession.dataTask(with: request) { data, response, error in
             
             if let error = error {
-                completion(.failure(error))
+                completion(nil, error.localizedDescription)
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(nil, "Не удалось обработать ответ сервера.")
+                return
+            }
+            
+            let statusCode = httpResponse.statusCode
+            
+            if statusCode != 200 {
+                completion(nil, HTTPResponse(rawValue: statusCode)?.rawValue)
             }
             
             if let data = data,
                let model = try? JSONDecoder().decode(TokenModel.self,
                                                      from: data) {
-                completion(.success(model))
+                completion(model, nil)
+            } else {
+                completion(nil, HTTPResponse.couldntDecode.rawValue)
             }
         }.resume()
     }

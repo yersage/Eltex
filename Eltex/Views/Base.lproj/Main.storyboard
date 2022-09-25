@@ -34,6 +34,7 @@
                         <viewLayoutGuide key="safeArea" id="HJt-xf-yPj"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <navigationItem key="navigationItem" id="QNC-xO-wNL"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mEh-3O-oMp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -50,12 +51,12 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="mrl-2s-RYy"/>
+                        <segue destination="qSV-g6-y1J" kind="relationship" relationship="rootViewController" id="fuo-gu-kVB"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mZM-tY-mlw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-557" y="92"/>
+            <point key="canvasLocation" x="-600" y="871"/>
         </scene>
     </scenes>
     <resources>

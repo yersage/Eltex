@@ -67,6 +67,8 @@ class AuthViewController: UIViewController {
         
         title = "Sign In"
         
+        view.backgroundColor = .white
+        
         navigationController?.navigationBar.prefersLargeTitles = true
         
         button.addTarget(self,
@@ -115,19 +117,33 @@ class AuthViewController: UIViewController {
         }
         
         manager.load(username: username,
-                     password: password) { [weak self] result in
-            switch result {
-            case .success(let model):
-                self?.tokenModel = model
+                     password: password) { [weak self] model, errorDescription in
+            if let errorDescription = errorDescription {
                 DispatchQueue.main.async {
-                    let vc = ProfileViewController()
-                    vc.token = model.access_token
-                    self?.navigationController?.pushViewController(vc, animated: true)
+                    self?.showErrorAlert(with: errorDescription)
                 }
-            case .failure(let error):
-                print(error)
+            }
+            
+            self?.tokenModel = model
+            DispatchQueue.main.async {
+                UserDefaults.standard.set(model?.access_token, forKey: "token")
+                UserDefaults.standard.set(true, forKey: "signed_in")
+                
+                let vc = ProfileViewController()
+                vc.token = model?.access_token
+                self?.navigationController?.pushViewController(vc, animated: true)
             }
         }
+    }
+    
+    private func showErrorAlert(with message: String) {
+        let alert = UIAlertController(title: "Ошибка!",
+                                      message: message,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel",
+                                      style: .cancel))
+        present(alert,
+                animated: true)
     }
 }
 
