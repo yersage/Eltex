@@ -8,9 +8,15 @@
 import Foundation
 
 class ProfileManager: NSObject {
-    func load(token: String, completion: @escaping (Result<ProfileModel, Error>) -> Void) {
+    func getProfileInfo(token: String,
+              completion: @escaping (Result<ProfileModel, NetworkError>) -> Void) {
         
-        var request = URLRequest(url: URL(string: "https://smart.eltex-co.ru:8273/api/v1/user")!,
+        guard let url = URL(string: "https://smart.eltex-co.ru:8273/api/v1/user") else {
+            completion(.failure(.badRequest))
+            return
+        }
+        
+        var request = URLRequest(url: url,
                                  timeoutInterval: Double.infinity)
         
         request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -21,9 +27,11 @@ class ProfileManager: NSObject {
                                     delegate: self,
                                     delegateQueue: nil)
                 
-        urlSession.dataTask(with: request) { data, response, error in
+        urlSession.dataTask(with: request) { [weak self] data, response, error in
             
             if let error = error {
+                completion(.failure(.custom(message: error.localizedDescription)))
+            } else if let error = self?.handleHTTPResponse(response as? HTTPURLResponse) {
                 completion(.failure(error))
             }
             
@@ -31,8 +39,30 @@ class ProfileManager: NSObject {
                let model = try? JSONDecoder().decode(ProfileModel.self,
                                                      from: data) {
                 completion(.success(model))
+            } else {
+                completion(.failure(.decode))
             }
         }.resume()
+    }
+    
+    private func handleHTTPResponse(_ response: HTTPURLResponse?) -> NetworkError? {
+        
+        guard let response = response else {
+            return NetworkError.badResponse
+        }
+        
+        switch response.statusCode {
+        case 200:
+            return nil
+        case 400:
+            return .badRequest
+        case 401:
+            return .unauthorized
+        case 500:
+            return .server
+        default:
+            return .unknown
+        }
     }
 }
 

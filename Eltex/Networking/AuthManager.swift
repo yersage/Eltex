@@ -8,46 +8,58 @@
 import Foundation
 
 class AuthManager: NSObject {
-    func load(username: String,
-              password: String,
-              completion: @escaping (TokenModel?, String?) -> Void) {
+    
+    func signIn(username: String,
+                password: String,
+                completion: @escaping (Result<TokenModel, NetworkError>) -> Void) {
         
         let urlSession = URLSession(configuration: .default,
                                     delegate: self,
                                     delegateQueue: nil)
         
-        let request = getURLRequest(username: username,
-                                    password: password)
+        let urlRequest = getURLRequest(username: username,
+                                       password: password)
         
-        urlSession.dataTask(with: request) { data, response, error in
+        urlSession.dataTask(with: urlRequest) { [weak self] data, response, error in
             
             if let error = error {
-                completion(nil, error.localizedDescription)
+                completion(.failure(.custom(message: error.localizedDescription)))
+            } else if let error = self?.handleHTTPResponse(response as? HTTPURLResponse) {
+                completion(.failure(error))
             }
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                completion(nil, "Не удалось обработать ответ сервера.")
-                return
-            }
-            
-            let statusCode = httpResponse.statusCode
-            
-            if statusCode != 200 {
-                completion(nil, HTTPResponse(rawValue: statusCode)?.rawValue)
-            }
-            
+                
             if let data = data,
                let model = try? JSONDecoder().decode(TokenModel.self,
                                                      from: data) {
-                completion(model, nil)
+                completion(.success(model))
             } else {
-                completion(nil, HTTPResponse.couldntDecode.rawValue)
+                completion(.failure(.decode))
             }
         }.resume()
     }
     
-    func getURLRequest(username: String,
-                       password: String) -> URLRequest {
+    private func handleHTTPResponse(_ response: HTTPURLResponse?) -> NetworkError? {
+        
+        guard let response = response else {
+            return NetworkError.badResponse
+        }
+        
+        switch response.statusCode {
+        case 200:
+            return nil
+        case 400:
+            return .badRequest
+        case 401:
+            return .unauthorized
+        case 500:
+            return .server
+        default:
+            return .unknown
+        }
+    }
+    
+    private func getURLRequest(username: String,
+                               password: String) -> URLRequest {
         
         let boundary = "Boundary-\(UUID().uuidString)"
         var postData: Data?

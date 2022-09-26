@@ -108,30 +108,30 @@ class AuthViewController: UIViewController {
     
     // MARK: - Selector methods
     @objc func signInButtonPressed() {
+        
         guard let username = usernameTextField.text,
               username.count > 0,
               let password = passwordTextField.text,
               password.count > 0 else {
-            print("Invalid credentials.")
+            showErrorAlert(with: "Не указаны имя или пароль.")
             return
         }
         
-        manager.load(username: username,
-                     password: password) { [weak self] model, errorDescription in
-            if let errorDescription = errorDescription {
-                DispatchQueue.main.async {
-                    self?.showErrorAlert(with: errorDescription)
-                }
-            }
-            
-            self?.tokenModel = model
-            DispatchQueue.main.async {
-                UserDefaults.standard.set(model?.access_token, forKey: "token")
+        manager.signIn(username: username,
+                       password: password) { [weak self] result in
+            switch result {
+            case .success(let model):
+                UserDefaults.standard.set(model.access_token, forKey: "token")
                 UserDefaults.standard.set(true, forKey: "signed_in")
                 
-                let vc = ProfileViewController()
-                vc.token = model?.access_token
-                self?.navigationController?.pushViewController(vc, animated: true)
+                DispatchQueue.main.async {
+                    let vc = ProfileViewController()
+                    self?.navigationController?.pushViewController(vc, animated: true)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self?.showErrorAlert(with: error.description)
+                }
             }
         }
     }
@@ -140,7 +140,7 @@ class AuthViewController: UIViewController {
         let alert = UIAlertController(title: "Ошибка!",
                                       message: message,
                                       preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel",
+        alert.addAction(UIAlertAction(title: "Отмена",
                                       style: .cancel))
         present(alert,
                 animated: true)

@@ -18,7 +18,7 @@
 		FC6D695228DCF0E500BE22AA /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D695128DCF0E500BE22AA /* ProfileModel.swift */; };
 		FC6D695528DCF52300BE22AA /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D695428DCF52300BE22AA /* UIView.swift */; };
 		FC6D695C28DE2C6A00BE22AA /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D695B28DE2C6A00BE22AA /* AuthManager.swift */; };
-		FC6D696028DE32F800BE22AA /* HTTPResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D695F28DE32F800BE22AA /* HTTPResponse.swift */; };
+		FC6D696028DE32F800BE22AA /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D695F28DE32F800BE22AA /* NetworkError.swift */; };
 		FC6D699928DE559600BE22AA /* ProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D699828DE559600BE22AA /* ProfileManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -36,7 +36,7 @@
 		FC6D695128DCF0E500BE22AA /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 		FC6D695428DCF52300BE22AA /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		FC6D695B28DE2C6A00BE22AA /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
-		FC6D695F28DE32F800BE22AA /* HTTPResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPResponse.swift; sourceTree = "<group>"; };
+		FC6D695F28DE32F800BE22AA /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		FC6D699828DE559600BE22AA /* ProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -131,7 +131,7 @@
 			children = (
 				FC6D695B28DE2C6A00BE22AA /* AuthManager.swift */,
 				FC6D699828DE559600BE22AA /* ProfileManager.swift */,
-				FC6D695F28DE32F800BE22AA /* HTTPResponse.swift */,
+				FC6D695F28DE32F800BE22AA /* NetworkError.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -215,7 +215,7 @@
 				FC6D695228DCF0E500BE22AA /* ProfileModel.swift in Sources */,
 				FC6D694E28DCEBAB00BE22AA /* TokenModel.swift in Sources */,
 				FC6D691428DC67AA00BE22AA /* SceneDelegate.swift in Sources */,
-				FC6D696028DE32F800BE22AA /* HTTPResponse.swift in Sources */,
+				FC6D696028DE32F800BE22AA /* NetworkError.swift in Sources */,
 				FC6D695C28DE2C6A00BE22AA /* AuthManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

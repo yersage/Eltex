@@ -8,7 +8,7 @@
 import UIKit
 
 class ProfileViewController: UIViewController {
-    
+    // MARK: - UI subviews
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.clipsToBounds = true
@@ -49,10 +49,11 @@ class ProfileViewController: UIViewController {
         return tableView
     }()
     
+    // MARK: - Dependencies
     private let manager = ProfileManager()
-    private var profileModel: ProfileModel?
-    var token: String?
-
+    private var permissions = [String]()
+    
+    // MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -72,25 +73,6 @@ class ProfileViewController: UIViewController {
                                                             target: self,
                                                             action: #selector(signOutButtonPressed))
         
-        guard let token = UserDefaults.standard.string(forKey: "token") else {
-            fatalError("Token is nil.")
-        }
-        
-        manager.load(token: token) { [weak self] result in
-            switch result {
-            case .success(let model):
-                self?.profileModel = model
-                DispatchQueue.main.async {
-                    self?.roleIDLabel.text = model.roleId
-                    self?.usernameLabel.text = model.username
-                    self?.emailLabel.text = model.email
-                    self?.tableView.reloadData()
-                }                
-            case .failure(let error):
-                fatalError(error.localizedDescription)
-            }
-        }
-        
         view.addSubview(scrollView)
         scrollView.addSubview(usernameLabel)
         scrollView.addSubview(roleIDLabel)
@@ -100,6 +82,8 @@ class ProfileViewController: UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
+        
+        downloadProfileInfo()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -148,16 +132,48 @@ class ProfileViewController: UIViewController {
             present(nav, animated: false)
         }
     }
+    
+    private func showErrorAlert(with message: String) {
+        let alert = UIAlertController(title: "Ошибка!",
+                                      message: message,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Отмена",
+                                      style: .cancel))
+        present(alert,
+                animated: true)
+    }
+    
+    private func downloadProfileInfo() {
+        
+        guard let token = UserDefaults.standard.string(forKey: "token") else {
+            return
+        }
+        
+        manager.getProfileInfo(token: token) { [weak self] result in
+            switch result {
+            case .success(let model):
+                DispatchQueue.main.async {
+                    self?.roleIDLabel.text = model.roleId
+                    self?.usernameLabel.text = model.username
+                    self?.emailLabel.text = model.email
+                    self?.permissions = model.permissions
+                    self?.tableView.reloadData()
+                }
+            case .failure(let error):
+                self?.showErrorAlert(with: error.localizedDescription)
+            }
+        }
+    }
 }
 
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return profileModel?.permissions.count ?? 0
+        return permissions.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = profileModel?.permissions[indexPath.row]
+        cell.textLabel?.text = permissions[indexPath.row]
         return cell
     }
 }
